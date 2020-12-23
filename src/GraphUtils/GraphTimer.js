@@ -64,6 +64,8 @@
   /**
    * This method is used to figure out how many points should 
    * be drawn on the x axis to represent the time passed.
+   * 
+   * @returns {horizontalTick}
    */
   getHorizontalTick(){
     return this.horizontalTick;
