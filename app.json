@@ -1,0 +1,12 @@
+{
+  "name": "bluetoothapp",
+  "displayName": "bluetoothapp",
+  "expo": {
+    "name": "bluetoothapp",
+    "slug": "bluetoothapp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
