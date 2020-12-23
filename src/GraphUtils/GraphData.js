@@ -8,10 +8,16 @@
 export class GraphData{
 
     constructor(){
-        //This graph is used to 
+        /**
+         * This array contains the list of data objects
+         * to be plotted on the graph
+         */
+        
         this.graphData = [];
     }
-
+    /**
+     * This method is used to determine the origin of the graph
+     */
     getGraphOrigin(){
         if(this.graphData.length > 1)
             return this.graphData[parseInt(this.graphData.length - 1)];
@@ -41,14 +47,15 @@ export class GraphData{
       /**
        * This method is used to initialize the graph. it is very essential
        * as it is needed to for the graph to have an object of X and Y value
-       * eventhough we cannot yet read data from the bluetooth device
+       * eventhough we cannot yet read data from the ble bluetooth device
        */
        dataInitializer(){
         //This data is used to initialize the chart when there is no signal yet or no readings
       const dataInitializer = [{x:0,y:0}];
+
         if(this.graphData.length === 0)
           return dataInitializer;
         else
-        return this.graphData;
+          return this.graphData;
       }
 }

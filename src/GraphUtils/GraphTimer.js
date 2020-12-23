@@ -32,6 +32,8 @@
   /**
    * This method returns the current number of seconds 
    * that have passed since the app started
+   * 
+   * 
    * @return {timer} the current second since the app started
    */
   getCurrentSeconds(){
@@ -40,11 +42,21 @@
   }
   /**
    * This usually represents at what time the graph starts. 
-   * It usually contains 0 seconds 
+   * It usually contains 0 seconds.
+   *  It is the first point to plot on the X axis
+   * 
+   * 
+   * @returns {minTimer} 
    */
   getMinTimer(){
    return this.minTimer;
   }
+
+  /**
+   * This method returns the maximun time in seconds that is plotted
+   * 
+   * @returns {maxTimer}
+   */
   getMaxTimer(){
     return this.maxTimer;
   }
@@ -56,6 +68,10 @@
   getHorizontalTick(){
     return this.horizontalTick;
   }
+
+  /**
+   * Stop the graph timer
+   */
   stopTimer(){
       clearInterval(this.beginTimer());
     }
