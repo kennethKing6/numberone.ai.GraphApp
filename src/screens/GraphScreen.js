@@ -1,10 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-console */
-/* eslint-disable no-shadow */
 import React, {
   useState,
   useEffect,
@@ -16,9 +9,9 @@ import {
   Chart, Line, Area, HorizontalAxis, VerticalAxis,
 } from 'react-native-responsive-linechart';
 import { Overlay } from 'react-native-elements';
-import { BLESupport } from './BLEUtils/BLESupport';
-import { GraphTimer } from './GraphUtils/GraphTimer';
-import { GraphData } from './GraphUtils/GraphData';
+import { BLESupport } from '../BLEUtils/BLESupport';
+import { GraphTimer } from '../GraphUtils/GraphTimer';
+import { GraphData } from '../GraphUtils/GraphData';
 
 /**
  * use these variables to determine the

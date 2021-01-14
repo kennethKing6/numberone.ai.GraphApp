@@ -19,10 +19,19 @@ export class BLESupport {
   }
 
   /**
+   * This method makes sure the 
+   */
+  initBLEManager(){
+    if(this.manager == null){
+      this.manager = new BleManager();
+    }
+  }
+  /**
      * This method is used to find a device
      * ble device it finds.
      */
   findDevice() {
+    this.initBLEManager();
     return new Promise((resolve, reject) =>
       // eslint-disable-next-line implicit-arrow-linebreak
       this.manager.startDeviceScan(null, null, (error, device) => {
@@ -41,7 +50,10 @@ export class BLESupport {
       }));
   }
 
-  getBLEManager() { return this.manager; }
+  getBLEManager() { 
+    initBLEManager()
+    return this.manager;
+   }
 
   /**
      * Wait until you at least get a device or you tried at least once
@@ -65,5 +77,10 @@ export class BLESupport {
 
   hasDevice() {
     return this.device !== undefined && this.device !== null;
+  }
+
+  destroyBLE(){
+    this.manager.destroy();
+    this.manager = null;
   }
 }

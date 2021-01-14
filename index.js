@@ -1,5 +1,5 @@
 import { registerRootComponent } from 'expo';
-import App from './src/GraphScreen';
+import App from './App';
 
 
 
