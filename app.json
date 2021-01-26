@@ -4,6 +4,9 @@
   "expo": {
     "name": "bluetoothapp",
     "slug": "bluetoothapp",
+    "ios":{
+      "requireFullScreen": true
+    },
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

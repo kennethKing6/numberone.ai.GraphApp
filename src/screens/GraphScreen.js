@@ -3,7 +3,7 @@ import React, {
   useEffect,
 } from 'react';
 import {
-  StyleSheet, Text, View, PermissionsAndroid, Dimensions,
+  StyleSheet, Text, View, PermissionsAndroid, Dimensions,BackHandler
 } from 'react-native';
 import {
   Chart, Line, Area, HorizontalAxis, VerticalAxis,
@@ -12,7 +12,11 @@ import { Overlay } from 'react-native-elements';
 import { BLESupport } from '../BLEUtils/BLESupport';
 import { GraphTimer } from '../GraphUtils/GraphTimer';
 import { GraphData } from '../GraphUtils/GraphData';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
+
+// lock screen orientation to landscape
+ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
 /**
  * use these variables to determine the
  * min and maximum point on the Y axis to be plotted.
@@ -119,6 +123,16 @@ function ECGChart(props) {
       console.log('I have the permission', response);
     }
   }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      ScreenOrientation.unlockAsync().then().catch();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
   return (
 
     <View style={props.style}>

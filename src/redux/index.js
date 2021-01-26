@@ -3,9 +3,9 @@ import {applyMiddleware, createStore} from 'redux';
 import {combinedReducers} from './reducers';
 
 //Used to persist states
-import thunk from 'redux-thunk';
-import { persistStore, persistReducer } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import thunk from 'redux-thunk';
+// import { persistStore, persistReducer } from 'redux-persist';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // const persistedReducer = persistReducer(persistConfig, combinedReducers)
 
 
-export const store = createStore(combinedReducers,applyMiddleware(...middleware));
+export const store = createStore(combinedReducers);
 
 
 //export const persistor = persistStore(store)

@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
-import {todosReducer} from './todosReducer';
+import {deviceReducer} from './deviceReducer';
 
 export const combinedReducers = combineReducers({
+    devicesObject: deviceReducer
 })
