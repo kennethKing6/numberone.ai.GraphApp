@@ -87,7 +87,6 @@ export class BLESupport {
     this.devices = [];
     this.BLEStatetateListener = null;
     this.device = null;
-    console.log("Done destroying")
     }catch(err){
       console.log("err",err)
     }

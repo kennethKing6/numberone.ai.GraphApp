@@ -14,7 +14,9 @@ export class GraphTimer {
 
   beginTimer(){
   
+     setInterval(()=>{
       this.timer =  this.timer + 1;
+     },1000)
       // console.log("timer " + this.timer)
 
    
@@ -25,7 +27,7 @@ export class GraphTimer {
  * This is used to determine the x axis of the graph
  */
   getTime() {
-    return  this.timer =  this.timer + 1;
+    return  this.timer;
   }
 
   restart(){

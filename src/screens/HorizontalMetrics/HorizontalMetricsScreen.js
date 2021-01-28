@@ -15,12 +15,14 @@ import { setConnectedDevice } from '../../redux/actions/DeviceActions/actions'
 import ECGChart from '../../components/ECGChartTwo';
 
 
+
  
 
 function HorizontalMetrics(props) {
   const [runningState,setRunningState] = useState(false);
   const connectedDevice = props.connectedDevice;
   const bleSupport = new BLESupport();
+  const [replay,setReplay] = useState(false);
 
    
   useEffect(() => {
@@ -30,7 +32,7 @@ function HorizontalMetrics(props) {
       
     });
 
-    console.log("the running state",runningState)
+    // console.log("the running state",runningState)
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [props.navigation,runningState]);
@@ -57,12 +59,12 @@ function HorizontalMetrics(props) {
                        NumberOne AI
                </Text>
            </View>
-        <View style={{flex:3,width:"100%",margin:10}}><ECGChart device={connectedDevice} navigation={props.navigation}/></View>
+        <View style={{flex:4,width:"100%",margin:10}}><ECGChart device={connectedDevice} navigation={props.navigation}/></View>
         <TouchableOpacity>
-          <Avatar containerStyle={{alignSelf:"center",width:47,height:47,margin:5,marginBottom:10}} size="small"
+          <Avatar containerStyle={{alignSelf:"center",width:37,height:37,margin:5,marginBottom:10}} size="small"
                       rounded
                       source={require("../../assets/icons/playButton.png")}
-                        onPress={()=>setRunningState(true)}
+                        onPress={()=>setReplay(!replay)}
                       />
         </TouchableOpacity>
       </View>

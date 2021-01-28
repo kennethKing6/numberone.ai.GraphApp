@@ -14,7 +14,7 @@ export const convertBinaryToInt = (base64)=>{
   // const height = binaryBuf[1];
   // const down = binaryBuf[0];
 
-  // console.log("binaryBuf.readUInt16LE()",binaryBuf.readUInt16LE() )
+  // console.log("binaryBuf.readUInt16BE()",binaryBuf.readUInt16BE() )
 //   const intUBE =  binaryBuf.readUInt16BE();
 //  if(intUBE >= 1500 && intUBE <= 2500)return intUBE ;
 //  else;

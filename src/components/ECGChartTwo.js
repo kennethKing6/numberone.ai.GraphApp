@@ -3,18 +3,9 @@ import {BLEDevice} from '../model/BLEUtils/BLEDevice';
 import { GraphTimer } from '../model/GraphUtils/GraphTimer';
 import {convertBinaryToInt} from '../model/BLEUtils/BinaryToInt';
 import { Chart, VerticalAxis, HorizontalAxis, Line } from 'react-native-responsive-linechart'
-
-import { Dimensions  } from 'react-native';
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
-} from "react-native-chart-kit";
-import {min,max} from 'mathjs';
 import {GraphPlotter} from '../model/GraphUtils/GraphPlotter'
+import {Alert} from 'react-native';
+import {WriteBLEValues} from '../model/BLEFile/BLEFile';
 
 
 const grapPlotter = new GraphPlotter();
@@ -30,14 +21,21 @@ export default function ECGGraph(props){
     useEffect(() => {
   
         const unsubscribeFocus = props.navigation.addListener("focus",()=>{
-            const timer = new GraphTimer();
-           //  timer.beginTimer();
-            connectedDevice.readECGData((ecgValue)=>{
+            // const timer = new GraphTimer();
+            // timer.beginTimer();
+            connectedDevice.readECGData((err,ecgValue)=>{
              // console.log("timer.shouldRestart()",timer.shouldRestart())
             
-   
-   
-              updateUI(ecgValue,timer.getTime())
+                
+                if(err === null && ecgValue){
+                    // WriteBLEValues(convertBinaryToInt(ecgValue));
+                    updateUI(ecgValue);
+
+                }else{
+                    connectedDevice.stopReadingECGData();
+                   //Display error to user 
+                   Alert.alert(err.message);
+                }
           })
     
         })
@@ -59,54 +57,22 @@ export default function ECGGraph(props){
      
       
       
-        function updateUI(base64Value,time){
+        function updateUI(base64Value){
           
             const graphValue = convertBinaryToInt(base64Value);
                 
-                if(graphValue >= 1500 && 2500 >= graphValue){
+                
                     const tempData = [];  
                  
-                grapPlotter.displayECGData(graphValue).forEach(ele=>{
-                   tempData.push(ele);
-                 })
-
-                 console.log("tempData",tempData);
-                  setGraphData(tempData);
-        
-                }
-            
-            
-   
+                    grapPlotter.displayECGData(graphValue).forEach(ele=>{
+                       tempData.push(ele);
+                     })
+    
+                    //  console.log("tempData",tempData);
+                      setGraphData(tempData);
+                
            }
 
-        //    function cleanData(base64Value){
-        //      const graphValue = convertBinaryToInt(base64Value);
-        //      graphData.length = 0;
-   
-        //      if(graphValue >= 1500 && graphValue <= 2500){
-        //        const data = [];
-        //        data.push(graphValue);
-        //        console.log("graphData",graphData)
-        //        setGraphData(data);
-               
-        //      }
-   
-        //    }
-        function getMinXDomain(){
-            if(graphData.length > 0){
-                return graphData[0].x;
-            }else{
-                return 0;
-            }
-        }
-        function getMaxXDomain(){
-            if(graphData.length > 0){
-                return graphData[graphData.length - 1].x + 2;
-            }else{
-                return 0;
-            }
-        }
-    
         function getXOrigin(){
             if(graphData.length > 0){
                 return graphData[0].x;
@@ -124,51 +90,22 @@ export default function ECGGraph(props){
         }
 
      
-      
-        function findMaxYDomain(){
-            var value = 2500;
-            if(graphData.length > 0){
-                const temp = [];
-                graphData.forEach(e=>{
-                    temp.push(e.y)
-                })
-                
-                value = max(temp) + 50;
-            }
-            const min = findMinYDomain();
-
-            if(min > value || min === value)
-                value += 100;
-
-            return value
-        }
-
-        function findMinYDomain(){
-            var value = 0;
-            if(graphData.length > 0){
-                const temp = [];
-                graphData.forEach(e=>{
-                    temp.push(e.y)
-                })
-                
-                 value = min(temp) - 50;
-            }
-            // console.log("findMinYDomain",value)
-
-            return value;
-        }
     return(
         <Chart
-    style={{ height: "90%", width: '100%', backgroundColor: '#eee' }}
-    xDomain={{ min: grapPlotter.getMinX(), max: grapPlotter.getMaxX() }}
-    yDomain={{ min:grapPlotter.getMinY(), max:grapPlotter.getMaxY() }}
-    padding={{ left: 20, top: 10, bottom: 10, right: 10 }}
-    viewport={{ 
-        initialOrigin: {x :getXOrigin() ,y:getYOrigin()},
-        size:{width: graphData.length === 0 ? 1:graphData.length} 
-        }}
+        
+        style={{ height: "90%", width: '100%', backgroundColor: '#eee'}}
+        xDomain={{ min: grapPlotter.getMinX(), max: grapPlotter.getMaxX() }}
+        yDomain={{ min:grapPlotter.getMinY(), max:grapPlotter.getMaxY() }}
+        padding={{ left: 20, top: 10, bottom: 10, right: 10 }}
+        viewport={{ 
+            initialOrigin: {x :getXOrigin() ,y:getYOrigin()},
+            size:{width: graphData.length === 0 ? 1:graphData.length} 
+            }}
+        padding={{ left: 40, bottom: 30, right: 20,top:30 }}
     >
-    <VerticalAxis />
+    <VerticalAxis 
+        // theme={{ labels: { formatter: (v) => v.toFixed(0) } }}
+    tickCount={5}/>
     <HorizontalAxis  />
     <Line data={graphData.length == 0 ?[{x:0,y:0}]:graphData}  smoothing="none" theme={{ stroke: { color: 'red', width: 1 } }} />
     </Chart>
