@@ -1,5 +1,6 @@
 import { Device,BleManager,Subscription } from 'react-native-ble-plx';
 
+export const TransactionId = "metronome";
 export class BLEDevice{
 
     constructor(device){
@@ -28,56 +29,86 @@ export class BLEDevice{
        if(this.hasDevice()){
           
         const bleManager = new BleManager();
-        bleManager.connectToDevice(this.device.id,{autoConnect:true}).then((device)=>{
-            this.device = device;
+
+        bleManager.connectToDevice(this.device.id,{autoConnect:true,requestMTU:30}).then((device)=>{
 
             //listen for device connection
-           this.onDisconnectedListener =  device.onDisconnected((err,device)=>{
-            
-            this.onDisconnectedListener.remove();
-            this.onDisconnectedListener = null;
-            callback(err, device);
-            })
-
+        
             return device.discoverAllServicesAndCharacteristics();
          
         }).then((device)=>{
-            
-            return device.characteristicsForService("3368ffa9-77bf-46b2-a148-1cbeb8ca490c")
+            this.device = device;
+            const serviceUUID = "3368ffa9-77bf-46b2-a148-1cbeb8ca490c";
+            return device.characteristicsForService(serviceUUID)
         }).then((characteristics)=>{
             this.characteristics = characteristics;
             const desiredCharacteristics =  characteristics[0];
-             this.charactListener = desiredCharacteristics.monitor((err,charac)=>{
+            const charactListener = desiredCharacteristics._manager.monitorCharacteristicForDevice(this.device.id,desiredCharacteristics.serviceUUID,desiredCharacteristics.uuid,(err,charac)=>{
       
-              if(err){
-                  this.charactListener.remove();
-                  this.charactListener = null;
-
+            
+               console.log("monitorCharacteristicForDevice");
+                if(err){
+                    charactListener.remove();
+                    bleManager.cancelTransaction(TransactionId)
                     callback(err);
-              }else{
-                callback(null,charac.value);
-              }
+                }else{
+                  callback(null,charac.value);
+                }
+                 
+                
+    
+                   
+               
+                },TransactionId)
+                console.log("connection listener",desiredCharacteristics._manager)
+                
+            //  this.charactListener = desiredCharacteristics.monitor((err,charac)=>{
+      
+            //   if(err){
+            //       this.charactListener.remove();
+            //       this.charactListener = null;
+
+            //         callback(err);
+            //   }else{
+            //     callback(null,charac.value);
+            //   }
                
               
   
                  
              
-              })  
+            //   })  
+        }).then(()=>{
+            console.log("adding on Disconnect")
+            return this.device.onDisconnected((err,device)=>{
+            if(err){
+                console.log("error" +JSON.stringify(err) + ", message:" + err)
+                
+               
+            }
+            callback(err, device);
+            console.log("disconnection error",JSON.stringify(err));
+            console.log("disconnection element")
+             })
         }).catch((BLEError)=>{
-            console.log("Reading ECG failed")
-            console.log("BLEError",BLEError);
-            console.log("BLEError message",BLEError.message);
-            callback(BLEError)
+            console.log("error" +JSON.stringify(BLEError) + ", message:" + BLEError)
+            callback(JSON.stringify(BLEError))
         })
         
        }
     }
 
     stopReadingECGData(){
-        if(this.charactListener !== null)this.charactListener.remove();
+        console.log("stop reading")
+       
+        
+        if(this.characteristics !== null){
+            this.characteristics = null;
+        }
 
-        if(this.characteristics !== null)this.characteristics = null;
-
-        if(this.onDisconnectedListener !== null) this.onDisconnectedListener.remove()
+        if(this.onDisconnectedListener !== null){
+            this.onDisconnectedListener.remove();
+            this.onDisconnectedListener = null;
+        }
     }
 }

@@ -116,11 +116,11 @@ export class BLESupport {
 
   getDeviceConnection(device){
     if(this.isBLEDevice(device) && this.manager instanceof BleManager){
-      return this.manager.connectToDevice(device.id)
+      return this.manager.connectToDevice(device.id,{autoConnect:true})
       .then((connectedDevice)=>{
         return connectedDevice.isConnected();
       }).then((isConnected)=>{
-        
+        console.log("device connected",isConnected)
         return isConnected;
 
       }).catch((BleError)=>{

@@ -60,16 +60,16 @@ export default function ECGGraph(props){
         function updateUI(base64Value){
           
             const graphValue = convertBinaryToInt(base64Value);
-                
-                
-                    const tempData = [];  
+            if (graphValue >= 1500 && graphValue <= 2500){
+                const tempData = [];  
                  
-                    grapPlotter.displayECGData(graphValue).forEach(ele=>{
-                       tempData.push(ele);
-                     })
-    
-                    //  console.log("tempData",tempData);
-                      setGraphData(tempData);
+                grapPlotter.displayECGData(graphValue).forEach(ele=>{
+                   tempData.push(ele);
+                 })
+
+                //  console.log("tempData",tempData);
+                  setGraphData(tempData);
+            }
                 
            }
 

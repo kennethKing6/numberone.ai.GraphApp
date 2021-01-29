@@ -3,7 +3,7 @@ import { Dimensions,Alert } from 'react-native';
 
 // This constant makes sure that values fall within the range 
 //of values of the graph
-const RANGE = 1; 
+const RANGE = 5; 
 
 
 //Timer constants
@@ -20,7 +20,7 @@ export class GraphPlotter{
         this.ECGTimeDislayValues =[];
         this.unSeenECGValues = [];
         this.minX = 0;
-        this.maxX = 660;
+        this.maxX = 600;
         this.minY = 0;
         this.maxY = 2500;
 
@@ -36,21 +36,20 @@ export class GraphPlotter{
     //     this.ECGDisplayValues.push(newECGReading);
     //     this.ECGTimeDislayValues.push({x:this.time,y:newECGReading})
         
-    //     if(this.graphTimerState === NoTimerSet){
-    //         this.graphTimerState = TimerBegan;
-    //         // this.maxX = this.determineMaxX();
-    //         //This allows the ecg arrays to collect enough data to display
-    //         //before moving the array
-    //         setTimeout(()=>this.graphTimerState = TimerEnded,1000)
-    //     }
+        // if(this.graphTimerState === NoTimerSet){
+        //     this.graphTimerState = TimerBegan;
+        //     // this.maxX = this.determineMaxX();
+        //     //This allows the ecg arrays to collect enough data to display
+        //     //before moving the array
+        //     setTimeout(()=>this.graphTimerState = TimerEnded,1000)
+        // }
 
     //     if(this.graphTimerState  === TimerEnded){
     //         console.log("value",this.ECGTimeDislayValues.length);
     //         this.unSeenECGValues.push(this.ECGDisplayValues.shift());
     //         this.ECGTimeDislayValues.shift(); 
     //         this.recentEcgIndex = this.recentEcgIndex - 1;
-    //         this.minX = this.minX + 1;
-    //         this.maxX = this.maxX +5 ;
+         
            
     
     //         // this.maxX = this.ECGTimeDislayValues.length;
@@ -58,7 +57,8 @@ export class GraphPlotter{
     //         //Update the range of Y values
     //         this.findMinYDomain();// update the min first 
     //         this.findMaxYDomain(); //update the max
-
+    //         this.findMinYDomain();// update the min first 
+    //         this.findMaxYDomain()
     //         return this.ECGTimeDislayValues;
     
     //     }
@@ -77,30 +77,62 @@ export class GraphPlotter{
         this.time = this.time + 1;
         this.recentEcgIndex = this.recentEcgIndex + 1;
 
-        //Make sure you get enough data to plot
         if(this.graphTimerState === NoTimerSet){
-            this.graphTimerState = TimerBegan;
+                this.graphTimerState = TimerBegan;
+                // this.maxX = this.determineMaxX();
+                //This allows the ecg arrays to collect enough data to display
+                //before moving the array
+                setTimeout(()=>this.graphTimerState = TimerEnded,3000)
+            }
+
+            this.ECGDisplayValues.push(newECGReading);
+            this.ECGTimeDislayValues.push({x:this.time,y:newECGReading})
+
+        //Make sure you get enough data to plot
+        if(this.graphTimerState === TimerEnded){
+            this.unSeenECGValues.push(this.ECGDisplayValues.shift());
+            this.ECGTimeDislayValues.shift(); 
+
+            this.minX = this.minX + 1;
+            this.maxX = this.maxX + 1;  
+            // this.findMinXDomain();
+            // this.findMaxXDomain();
+            this.findMinYDomain();// update the min first 
+            this.findMaxYDomain();
+
+            return this.ECGTimeDislayValues;
+
+            // this.maxX = this.maxX + 1;
+            // this.minX = this.minX + 1;
             // this.maxX = this.determineMaxX();
             //This allows the ecg arrays to collect enough data to display
             //before moving the array
-            setTimeout(()=>this.graphTimerState = TimerEnded,3000)
         }
 
-        this.ECGDisplayValues.push(newECGReading);
-        this.ECGTimeDislayValues.push({x:this.time,y:newECGReading})
+        
+        
+        
 
-        if(this.graphTimerState === TimerEnded ){
-            this.unSeenECGValues.push(this.ECGDisplayValues.shift());
-            this.ECGTimeDislayValues.shift(); 
-            this.maxX = this.maxX + 1;
-            this.minX = this.minX + 1;
-        }
+        // if(this.graphTimerState === TimerEnded ){
+        //     this.graphTimerState = TimerBegan;
+        //     this.ECGDisplayValues.length = 0;
+        //     this.ECGTimeDislayValues.length = 0;
+        // }
 
-        this.findMinYDomain();// update the min first 
-        this.findMaxYDomain();
+        
 
-        return this.ECGTimeDislayValues;
+        // if(this.graphTimerState === TimerEnded ){
+            
+          
+        // }else{
+        //     this.maxX = this.ECGDisplayValues.length + 1; 
+        // }
+
+
+      
+        return   [{x:0,y:0}];
     }
+
      findMaxYDomain(){
         if(this.ECGDisplayValues.length > 0){
            

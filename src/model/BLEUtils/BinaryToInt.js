@@ -1,5 +1,6 @@
 import {Buffer} from 'buffer';  
 import { Base64 } from 'js-base64';
+import { string } from 'mathjs';
 
 
 
@@ -8,7 +9,7 @@ export const convertBinaryToInt = (base64)=>{
 //  const bytes = base64.toByteArray(Base64);
 //  const view = new DataView(bytes.buffer);
 //  const value = view.getFloat32();
-
+ if(typeof base64 === "string"){
   const binaryBuf = Buffer.from(base64,'base64');
 
   // const height = binaryBuf[1];
@@ -21,4 +22,6 @@ export const convertBinaryToInt = (base64)=>{
  
   // console.log("binaryBuf", binaryBuf.readUInt16BE(0))
   return binaryBuf.readUInt16LE();
+ }
+ return undefined;
 }

@@ -64,7 +64,10 @@ function HorizontalMetrics(props) {
           <Avatar containerStyle={{alignSelf:"center",width:37,height:37,margin:5,marginBottom:10}} size="small"
                       rounded
                       source={require("../../assets/icons/playButton.png")}
-                        onPress={()=>setReplay(!replay)}
+                        onPress={()=>{
+                          console.log("Button pressed");
+                          setReplay(!replay)
+                        }}
                       />
         </TouchableOpacity>
       </View>
