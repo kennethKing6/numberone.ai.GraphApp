@@ -21,7 +21,7 @@ export const convertBinaryToInt = (base64)=>{
 //  else;
  
   // console.log("binaryBuf", binaryBuf.readUInt16BE(0))
-  return binaryBuf.readUInt16LE();
+  return binaryBuf.readUInt16LE()%4095;
  }
  return undefined;
 }
