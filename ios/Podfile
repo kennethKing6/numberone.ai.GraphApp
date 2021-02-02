@@ -30,5 +30,8 @@ target 'bluetoothapp' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
+  
+  pod 'react-native-bg-thread', :path => '../node_modules/react-native-bg-thread/react-native-bg-thread.podspec'
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
 end

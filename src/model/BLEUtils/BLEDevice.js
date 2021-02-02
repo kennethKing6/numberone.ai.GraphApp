@@ -30,7 +30,7 @@ export class BLEDevice{
           
         const bleManager = new BleManager();
 
-        bleManager.connectToDevice(this.device.id,{autoConnect:true,requestMTU:30}).then((device)=>{
+        bleManager.connectToDevice(this.device.id,{autoConnect:true}).then((device)=>{
 
             //listen for device connection
         
@@ -46,8 +46,14 @@ export class BLEDevice{
             const charactListener = desiredCharacteristics._manager.monitorCharacteristicForDevice(this.device.id,desiredCharacteristics.serviceUUID,desiredCharacteristics.uuid,(err,charac)=>{
       
             
-               console.log("monitorCharacteristicForDevice");
                 if(err){
+                    const errorObj = JSON.stringify(err);
+                    if(errorObj.errorCode === 201){
+                        console.log("error status 201", errorObj);
+                        this.readECGData(callback);
+                    }
+                    console.log("desiredCharacteristics listener",JSON.stringify(err));
+
                     charactListener.remove();
                     bleManager.cancelTransaction(TransactionId)
                     callback(err);
@@ -98,8 +104,37 @@ export class BLEDevice{
        }
     }
 
+    // readECGData(callback){
+    //     if(this.hasDevice()){
+           
+    //      const bleManager = new BleManager();
+    //      console.log("bleManager",bleManager)
+    //      bleManager.connectToDevice(this.device.id,{autoConnect:true}).then((device)=>{
+    //          this.device = device;
+    //          if(device)return device.discoverAllServicesAndCharacteristics();
+    //          else console.log("lost connection",device)
+    //      }).then((device)=>{
+    //          return device.characteristicsForService("3368ffa9-77bf-46b2-a148-1cbeb8ca490c")
+    //      }).then((characteristics)=>{
+    //          this.characteristics = characteristics;
+    //          const desiredCharacteristics =  characteristics[0];
+    //           this.charactListener = desiredCharacteristics.monitor((err,charac)=>{
+       
+    //            if(err)callback(null,err);
+    //            else  callback(charac.value);
+                 
+              
+    //            })  
+    //      }).catch((BLEError)=>{
+    //          console.log("Reading ECG failed")
+    //          console.log("BLEError",BLEError);
+    //          console.log("BLEError message",BLEError.message);
+    //      })
+         
+    //     }
+    //  }
+ 
     stopReadingECGData(){
-        console.log("stop reading")
        
         
         if(this.characteristics !== null){

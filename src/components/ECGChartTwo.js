@@ -3,9 +3,10 @@ import {BLEDevice} from '../model/BLEUtils/BLEDevice';
 import { GraphTimer } from '../model/GraphUtils/GraphTimer';
 import {convertBinaryToInt} from '../model/BLEUtils/BinaryToInt';
 import { Chart, VerticalAxis, HorizontalAxis, Line } from 'react-native-responsive-linechart'
-import {GraphPlotter} from '../model/GraphUtils/GraphPlotter'
+import {GraphPlotter} from '../model/GraphUtils/GraphPlotterTwo'
 import {Alert} from 'react-native';
-import {WriteBLEValues} from '../model/BLEFile/BLEFile';
+// import RnBgTask from 'react-native-bg-thread';
+
 
 
 const grapPlotter = new GraphPlotter();
@@ -60,7 +61,7 @@ export default function ECGGraph(props){
         function updateUI(base64Value){
           
             const graphValue = convertBinaryToInt(base64Value);
-            if (graphValue >= 1500 && graphValue <= 2500){
+            
                 const tempData = [];  
                  
                 grapPlotter.displayECGData(graphValue).forEach(ele=>{
@@ -69,7 +70,7 @@ export default function ECGGraph(props){
 
                 //  console.log("tempData",tempData);
                   setGraphData(tempData);
-            }
+            
                 
            }
 
@@ -92,7 +93,6 @@ export default function ECGGraph(props){
      
     return(
         <Chart
-        
         style={{ height: "90%", width: '100%', backgroundColor: '#eee'}}
         xDomain={{ min: grapPlotter.getMinX(), max: grapPlotter.getMaxX() }}
         yDomain={{ min:grapPlotter.getMinY(), max:grapPlotter.getMaxY() }}
@@ -103,11 +103,9 @@ export default function ECGGraph(props){
             }}
         padding={{ left: 40, bottom: 30, right: 20,top:30 }}
     >
-    <VerticalAxis 
-        // theme={{ labels: { formatter: (v) => v.toFixed(0) } }}
-    tickCount={5}/>
+    <VerticalAxis />
     <HorizontalAxis  />
-    <Line data={graphData.length == 0 ?[{x:0,y:0}]:graphData}  smoothing="none" theme={{ stroke: { color: 'red', width: 1 } }} />
+    <Line data={graphData.length == 0 ?[{x:0,y:0}]:graphData}  smoothing="bezier" theme={{ stroke: { color: 'red', width: 1 } }} />
     </Chart>
     )
 
